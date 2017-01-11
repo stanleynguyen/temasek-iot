@@ -24,6 +24,7 @@
     },
     "globals": {
         "require": true,
-        "process": true
+        "process": true,
+        "module": true
     }
 }
