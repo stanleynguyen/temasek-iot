@@ -5,7 +5,10 @@ module.exports = (pg, options) => {
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
       nric TEXT NOT NULL,
-      phone INT NOT NULL
+      phone INT NOT NULL,
+      email TEXT NOT NULL,
+      company TEXT NOT NULL,
+      shares TEXT NOT NULL
     )`
   );
   createQuery.on('end', () => { client.end(); });
