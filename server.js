@@ -1,14 +1,12 @@
 if (process.env.NODE_ENV === 'dev') require('dotenv').load();
 
 const express = require('express');
-
-const dbQuery = require('./models/db');
+const bodyParser = require('body-parser');
 
 const app = express();
+app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/', (req, res) => {
-  res.send('OK');
-});
+app.use(require('./api'));
 
 app.listen(process.env.PORT, (err) => {
   if (err) throw err;

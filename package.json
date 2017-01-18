@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/stanleynguyen/temasek-iot#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "http-auth": "^3.1.1",
     "pg": "^6.1.2",
     "pg-escape": "^0.2.0"
   },
