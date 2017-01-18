@@ -7,8 +7,9 @@ module.exports = (pg, options) => {
       nric TEXT NOT NULL,
       phone INT NOT NULL,
       email TEXT NOT NULL,
-      company TEXT NOT NULL,
-      shares TEXT NOT NULL
+      company_id INT NOT NULL,
+      shares TEXT NOT NULL,
+      FOREIGN KEY (company_id) REFERENCES Companies(id)
     )`
   );
   createQuery.on('end', () => { client.end(); });

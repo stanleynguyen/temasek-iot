@@ -14,6 +14,9 @@ require('./question')(pg, options);
 require('./choice')(pg, options);
 require('./vote')(pg, options);
 require('./voter')(pg, options);
+require('./company')(pg, options);
+require('./event')(pg, options);
+require('./organiser')(pg, options);
 
 function dbQuery(queryString, callback) {
   const client = new pg.Client(options);
