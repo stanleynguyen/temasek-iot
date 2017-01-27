@@ -5,6 +5,33 @@ const adminAuth = require('./middlewares/adminAuth');
 
 router.use(adminAuth);
 
+router.get('/company/all', (req, res) => {
+  dbQuery('SELECT * FROM Companies', (err, results) => {
+    if (err) return res.status(500).send('Database Error');
+    res.status(200).json(results);
+  });
+});
+
+router.post('/company', (req, res) => {
+  dbQuery(
+    `INSERT INTO Companies (name)
+    VALUES ('${req.body.name}')`,
+    (err) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).send('OK');
+    }
+  );
+});
+
+router.delete('/company/:id', (req, res) => {
+  dbQuery(
+    `DELETE FROM Companies WHERE id=${req.params.id}`, (err) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).send('OK');
+    }
+  );
+});
+
 router.get('/organiser/all', (req, res) => {
   dbQuery('SELECT * FROM Organisers', (err, results) => {
     if (err) return res.status(500).send('Database Error');
@@ -20,6 +47,15 @@ router.post('/organiser', (req, res) => {
     (err) => {
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');
+    }
+  );
+});
+
+router.get('/organiser/:id', (req, res) => {
+  dbQuery(
+    `SELECT * FROM Organisers WHERE id=${req.params.id}`, (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results);
     }
   );
 });

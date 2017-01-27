@@ -40,24 +40,10 @@ router.get('/voter/:id', organiserAuth, (req, res) => {
 });
 
 router.post('/voter', organiserAuth, (req, res) => {
-  let { name, nric, phone, email, company, shares } = req.body;
+  let { name, nric, country_code, phone, email, company, shares } = req.body;
   dbQuery(
-    `INSERT INTO Voters (name, nric, phone, email, company, shares)
-    VALUES ('${name}', '${nric}', '${phone}', '${email}', '${company}', '${shares}')`,
-    (err) => {
-      if (err) return res.status(500).send('Database Error');
-      res.status(200).send('OK');
-    }
-  );
-});
-
-router.put('/voter/:id', organiserAuth, (req, res) => {
-  let id = req.params.id;
-  let { name, nric, phone, email, company, shares } = req.body;
-  dbQuery(
-    `UPDATE Voters
-    SET name='${name}', nric='${nric}', phone='${phone}', email='${email}', company='${company}', shares='${shares}'
-    WHERE id=${id}`,
+    `INSERT INTO Voters (name, nric, country_code, phone, email, company, shares)
+    VALUES ('${name}', '${nric}', '${country_code}', '${phone}', '${email}', '${company}', '${shares}')`,
     (err) => {
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');
