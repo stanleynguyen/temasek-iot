@@ -45,6 +45,7 @@ router.post('/organiser', (req, res) => {
     `INSERT INTO Organisers (email, password, company_id)
     VALUES ('${email}', '${password}', '${company_id}')`,
     (err) => {
+      console.log(err)
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');
     }

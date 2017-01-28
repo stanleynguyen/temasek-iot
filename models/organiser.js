@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 
 module.exports.initialize = (pg, options, done) => {
   const client = new pg.Client(options);
+  client.connect();
   const createQuery = client.query(
     `CREATE TABLE IF NOT EXISTS Organisers (
       id SERIAL PRIMARY KEY,
