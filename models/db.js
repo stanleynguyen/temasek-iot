@@ -32,13 +32,6 @@ require('async').waterfall([
   require('./vote').bind(null, pg, options)
 ]);
 
-
-
-
-
-
-
-
 function dbQuery(queryString, callback) {
   const client = new pg.Client(options);
   client.connect();
