@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-module.exports.initialize = (pg, options) => {
+module.exports.initialize = (pg, options, done) => {
   const client = new pg.Client(options);
   const createQuery = client.query(
     `CREATE TABLE IF NOT EXISTS Organisers (
@@ -11,7 +11,7 @@ module.exports.initialize = (pg, options) => {
       FOREIGN KEY (company_id) REFERENCES Companies(id)
     )`
   );
-  createQuery.on('end', () => { client.end(); });
+  createQuery.on('end', () => { client.end(); done(); });
 };
 
 module.exports.encryptPassword = (password) => bcrypt.hashSync(password, 10);

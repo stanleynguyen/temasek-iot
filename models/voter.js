@@ -1,4 +1,4 @@
-module.exports = (pg, options) => {
+module.exports = (pg, options, done) => {
   const client = new pg.Client(options);
   const createQuery = client.query(
     `CREATE TABLE IF NOT EXISTS Voters (
@@ -15,5 +15,5 @@ module.exports = (pg, options) => {
       FOREIGN KEY (company_id) REFERENCES Companies(id)
     )`
   );
-  createQuery.on('end', () => { client.end(); });
+  createQuery.on('end', () => { client.end(); done(); });
 };

@@ -10,13 +10,34 @@ const options = {
 };
 
 //import models
-require('./question')(pg, options);
-require('./choice')(pg, options);
-require('./vote')(pg, options);
-require('./voter')(pg, options);
-require('./company')(pg, options);
-require('./event')(pg, options);
-require('./organiser').initialize(pg, options);
+require('async').waterfall([
+  (done) => {
+    require('./company')(pg, options, done);
+  },
+  (done) => {
+    require('./organiser').initialize(pg, options, done);
+  },
+  (done) => {
+    require('./event')(pg, options, done);
+  },
+  (done) => {
+    require('./question')(pg, options, done);
+  },
+  (done) => {
+    require('./choice')(pg, options, done);
+  },
+  (done) => {
+    require('./voter')(pg, options, done);
+  },
+  require('./vote').bind(null, pg, options)
+]);
+
+
+
+
+
+
+
 
 function dbQuery(queryString, callback) {
   const client = new pg.Client(options);

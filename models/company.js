@@ -1,4 +1,4 @@
-module.exports = (pg, options) => {
+module.exports = (pg, options, done) => {
   const client = new pg.Client(options);
   client.connect();
   const createQuery = client.query(
@@ -7,5 +7,5 @@ module.exports = (pg, options) => {
       name TEXT NOT NULL
     )`
   );
-  createQuery.on('end', () => { client.end(); });
+  createQuery.on('end', () => { client.end(); done(); });
 };
