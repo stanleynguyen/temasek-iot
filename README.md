@@ -50,3 +50,37 @@ __delete a single Organiser__
 ```
 DELETE /api/admin/organiser/<id of the organiser>
 ```
+
+### voter endpoints
+
+__registration__
+```
+POST /api/voter/register
+{
+  name: { type: string },
+  nric: { type: string, unique: true },
+  country_code: { type: integer },
+  phone: { type: integer },
+  email: { type: string },
+  shares: { type: string }
+}
+```
+
+__get registration code__
+```
+POST
+{
+  countryCode: { type: integer },
+  phone: { type: integer }
+}
+```
+
+__verify registration phone number__
+```
+POST
+{
+  countryCode: { type: integer },
+  phone: { type: integer },
+  verifyCode: { type: integer }
+}
+```

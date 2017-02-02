@@ -7,7 +7,7 @@ router.post('/register', (req, res) => {
   let { name, nric, country_code, phone, email, company, shares } = req.body;
   dbQuery(
     `INSERT INTO Voters (name, nric, country_code, phone, email, company, shares, phone_verified, organiser_verified)
-    VALUES ('${name}', '${nric}', '${country_code}', '${phone}', '${email}', '${company}', '${shares}', FALSE, FALSE)`,
+    VALUES ('${name}', '${nric}', ${country_code}, ${phone}, '${email}', '${company}', '${shares}', FALSE, FALSE)`,
     (err) => {
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');
@@ -30,7 +30,7 @@ router.post('/verfiy-reg', (req, res) => {
     dbQuery(
       `UPDATE Voters
       SET phone_verified=TRUE
-      WHERE phone=${phone}`,
+      WHERE country_code=${countryCode} AND phone=${phone}`,
       (err) => {
         if (err) return res.status(500).send('Database Error');
         res.status(200).json(response);
