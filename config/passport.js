@@ -18,7 +18,7 @@ passport.deserializeUser( (userId, done) => {
 
 passport.use(new localStrat( (email, password, done) => {
   dbQuery(
-    `SELECT * FROM Organisers WHERE email=${email}`, (err, user) => {
+    `SELECT * FROM Organisers WHERE email='${email}'`, (err, user) => {
       if (err) return done(err);
       if (!user) return done(null, false);
       if (!User.checkPassword(password, user.password)) return done(null, false);

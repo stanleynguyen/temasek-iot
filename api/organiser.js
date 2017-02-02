@@ -23,7 +23,7 @@ router.get('/authenticate/logout', organiserAuth, (req, res) => {
 // voters operations
 router.get('/voter/all', organiserAuth, (req, res) => {
   dbQuery(
-    'SELECT * FROM Voters', (err, results) => {
+    'SELECT * FROM Voters WHERE phone_verified=TRUE', (err, results) => {
       if (err) return res.status(500).send('Database Error');
       res.status(200).json(results);
     }
@@ -39,11 +39,11 @@ router.get('/voter/:id', organiserAuth, (req, res) => {
   );
 });
 
-router.post('/voter', organiserAuth, (req, res) => {
-  let { name, nric, country_code, phone, email, company, shares } = req.body;
+router.post('/voter/:id', organiserAuth, (req, res) => {
   dbQuery(
-    `INSERT INTO Voters (name, nric, country_code, phone, email, company, shares)
-    VALUES ('${name}', '${nric}', '${country_code}', '${phone}', '${email}', '${company}', '${shares}')`,
+    `UPDATE Voters
+    SET organiser_verified=TRUE
+    WHERE id=${req.params.id}`,
     (err) => {
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');

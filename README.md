@@ -51,6 +51,43 @@ __delete a single Organiser__
 DELETE /api/admin/organiser/<id of the organiser>
 ```
 
+### organiser endpoints 
+
+__authentication__
+```
+# just send this request with correct credentials, a sesssion will be automatically created
+
+#login
+POST /api/organiser/authenticate/login
+{
+  email: { type: string },
+  password: { type: string }
+}
+
+#logout
+GET /api/organiser/authenticate/logout
+```
+
+__get list of voters__
+```
+GET /api/organiser/voter/all
+```
+
+__get single voter__
+```
+GET /api/organiser/voter/<id of the voter>
+```
+
+__activate voter's account__
+```
+POST /api/organiser/voter/<id of the voter>
+```
+
+__delete voter__
+```
+DELETE /api/organiser/voter/<id of the voter>
+```
+
 ### voter endpoints
 
 __registration__
@@ -68,7 +105,7 @@ POST /api/voter/register
 
 __get registration code__
 ```
-POST
+POST /api/voter/getcode
 {
   countryCode: { type: integer },
   phone: { type: integer }
@@ -77,7 +114,7 @@ POST
 
 __verify registration phone number__
 ```
-POST
+POST /api/voter/verify-reg
 {
   countryCode: { type: integer },
   phone: { type: integer },
