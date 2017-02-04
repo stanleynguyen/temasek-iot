@@ -15,8 +15,8 @@ router.get('/company/all', (req, res) => {
 
 router.post('/company', (req, res) => {
   dbQuery(
-    `INSERT INTO Companies (name)
-    VALUES ('${req.body.name}')`,
+    `INSERT INTO Companies(name)
+    VALUES('${req.body.name}')`,
     (err) => {
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');
@@ -27,6 +27,7 @@ router.post('/company', (req, res) => {
 router.delete('/company/:id', (req, res) => {
   dbQuery(
     `DELETE FROM Companies WHERE id=${req.params.id}`, (err) => {
+      if (err.code === '23503') return res.status(500).send('There is reference to this company');
       if (err) return res.status(500).send('Database Error');
       res.status(200).send('OK');
     }
@@ -34,10 +35,14 @@ router.delete('/company/:id', (req, res) => {
 });
 
 router.get('/organiser/all', (req, res) => {
-  dbQuery('SELECT * FROM Organisers', (err, results) => {
-    if (err) return res.status(500).send('Database Error');
-    res.status(200).json(results);
-  });
+  dbQuery(
+    `SELECT Organisers.email, Organisers.company_id, Companies.name as companyName
+    FROM Organisers, Companies
+    WHERE Organisers.company_id=Companies.id`,
+    (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results);
+    });
 });
 
 router.post('/organiser', (req, res) => {

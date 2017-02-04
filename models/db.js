@@ -29,6 +29,9 @@ require('async').waterfall([
   (done) => {
     require('./voter')(pg, options, done);
   },
+  (done) => {
+    require('./attendance')(pg, options, done);
+  },
   require('./vote').bind(null, pg, options)
 ]);
 
