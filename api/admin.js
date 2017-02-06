@@ -7,10 +7,16 @@ const Organiser = require('../models/organiser');
 router.use(adminAuth);
 
 router.get('/company/all', (req, res) => {
-  dbQuery('SELECT * FROM Companies', (err, results) => {
-    if (err) return res.status(500).send('Database Error');
-    res.status(200).json(results);
-  });
+  dbQuery(
+    `SELECT Companies.id, Companies.name,
+    CASE WHEN COUNT(Organisers) = 0 THEN '[]'
+    ELSE json_agg((SELECT x FROM (SELECT Organisers.id, Organisers.email) x)) END AS organisers
+    FROM Companies LEFT JOIN Organisers ON company_id = Companies.id
+    GROUP BY Companies.id`,
+    (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results);
+    });
 });
 
 router.post('/company', (req, res) => {
