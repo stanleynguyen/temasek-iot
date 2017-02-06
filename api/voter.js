@@ -3,6 +3,7 @@ const authy = require('authy')(process.env.AUTHY_API_KEY);
 const jwt = require('jsonwebtoken');
 
 const dbQuery = require('../models/db');
+const voterAuth = require('./middlewares/voterAuth');
 
 router.post('/register', (req, res) => {
   let { name, nric, country_code, phone, email, company, shares } = req.body;
@@ -64,15 +65,15 @@ router.post('/authenticate/login', (req, res) => {
   dbQuery(
     `SELECT *
     FROM Voters
-    WHERE nric=${req.body.nric}`,
+    WHERE nric='${req.body.nric}'`,
     (err, results) => {
       if (err) return res.status(500).send('Database Error');
-      if (results.length === 0) return res.status(404).send('User Not Found');
+      if (results.length === 0) return res.status(403).send('User Not Found');
       let { country_code, phone } = results[0];
       authy.phones().verification_check(phone, country_code, req.body.verifyCode, (err) => {
-        if (err) return res.status(500).send('Authy Error');
-        var token = jwt.sign(results[0], process.env.SECRET, { expiresInMinutes: 1440 });
-        res.json({ success: true, token });
+        if (err) return res.status(403).send('Unauthorized');
+        var token = jwt.sign(results[0], process.env.SECRET, { expiresIn: '12h' });
+        res.status(200).json({ success: true, token });
       });
     }
   );
@@ -88,5 +89,7 @@ router.get('/companies', (req, res) => {
     }
   );
 });
+
+// voting routes
 
 module.exports = router;
