@@ -247,11 +247,11 @@ router.delete('/event/:id', organiserAuth, (req, res) => {
 // questions operations
 router.post('/question', organiserAuth, (req, res) => {
   let { question, choices, eventId } = req.body;
-  choices = choices.reduce((sum, c) => sum + `'${c}',`, '');
+  choices = choices.reduce((sum, c) => sum + `"${c}",`, '');
   choices = `{${choices.substring(0, choices.length-1)}}`;
   dbQuery(
-    `INSERT INTO Questions (question, , event_id)
-    VALUES ('${question}', ${choices}, (
+    `INSERT INTO Questions (question, choices, event_id)
+    VALUES ('${question}', '${choices}', (
       SELECT e.id FROM Events e
       WHERE e.id=${eventId}
       AND e.company_id=${req.user.company_id}

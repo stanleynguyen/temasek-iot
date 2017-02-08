@@ -60,17 +60,28 @@ __authentication__
 #login
 POST /api/organiser/authenticate/login
 {
-  email: { type: string },
+  username: { type: string },
   password: { type: string }
 }
-
-#logout
-GET /api/organiser/authenticate/logout
 ```
 
-__get list of voters__
+__get list of all voters__
 ```
 GET /api/organiser/voter/all
+```
+
+__get list of unverified voters__
+```
+GET /api/organiser/voter/unverified
+```
+
+__add a voter to an event__ 
+```
+POST /api/organiser/voter/join
+{
+  voterId: { type: int },
+  eventId: { type: int }
+}
 ```
 
 __get single voter__
@@ -88,9 +99,57 @@ __delete voter__
 DELETE /api/organiser/voter/<id of the voter>
 ```
 
-__get questions__ 
+__get all events__
+```
+GET /api/organiser/event/all
 ```
 
+__get single event__ 
+```
+GET /api/organiser/event/<id of the event>
+```
+
+__create new event__ 
+```
+POST /api/organiser/event
+{
+  name: { type: string }
+}
+```
+
+__edit event___
+```
+PUT /api/organiser/event/<id of the event>
+{
+  name: { type: string }
+}
+```
+
+__start an event__
+```
+POST /api/organiser/event/<id of the event>/start
+```
+
+__end an event__
+```
+# event must be started before it can be ended
+
+POST /api/organiser/event/<id of the event>/end
+```
+
+__delete an event__ 
+```
+DELETE /api/organiser/event/<id of the event>
+```
+
+__create a question__
+```
+POST /api/organiser/question
+{
+  eventId: { type: int, reference: event.id },
+  question: { type: string },
+  choices: [ { type: string } ]
+}
 ```
 
 ### voter endpoints
