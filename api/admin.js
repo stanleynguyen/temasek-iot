@@ -75,8 +75,7 @@ router.post('/organiser', (req, res) => {
         from: 'temasekpolling@gmail.com',
         to: email,
         subject: 'TMS Polling Organiser Password',
-        text: `Your auto-generated password for our service is ${password}.\n
-              Please login and change it.`
+        text: `Your auto-generated password for our service is ${password}.\nPlease login and change it.`
       }, (err) => {
         if (err) return res.status(500).send('Mailer Error');
         res.status(200).send('OK');

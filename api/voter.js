@@ -44,7 +44,12 @@ router.post('/verfiy-reg', (req, res) => {
 // authentication route
 router.post('/authenticate/otp', (req, res) => {
   dbQuery(
-    `SELECT country_code, phone
+    `UPDATE Voters
+    SET current_event_id=a.event_id
+    FROM Voters v INNER JOIN Attendances a ON v.id=a.voter_id
+    WHERE v.nric='${req.body.nric}'
+    AND a.event_id=${req.body.eventId};
+    SELECT country_code, phone
     FROM Voters
     WHERE nric='${req.body.nric}'
     AND phone_verified=TRUE
@@ -72,7 +77,7 @@ router.post('/authenticate/login', (req, res) => {
       let { country_code, phone } = results[0];
       authy.phones().verification_check(phone, country_code, req.body.verifyCode, (err) => {
         if (err) return res.status(403).send('Unauthorized');
-        var token = jwt.sign(results[0], process.env.SECRET, { expiresIn: '12h' });
+        const token = jwt.sign(results[0], process.env.SECRET, { expiresIn: '12h' });
         res.status(200).json({ success: true, token });
       });
     }

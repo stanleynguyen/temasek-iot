@@ -5,9 +5,10 @@ module.exports = (pg, options) => {
     `CREATE TABLE IF NOT EXISTS Votes (
       id SERIAL PRIMARY KEY,
       voter_id INT NOT NULL,
-      choice_id INT NOT NULL,
+      question_id INT NOT NULL,
+      choice INT NOT NULL,
       FOREIGN KEY (voter_id) REFERENCES Voters(id),
-      FOREIGN KEY (choice_id) REFERENCES Choices(id)
+      FOREIGN KEY (question_id) REFERENCES Questions(id)
     )`
   );
   createQuery.on('end', () => { client.end(); });

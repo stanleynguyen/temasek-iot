@@ -24,9 +24,6 @@ require('async').waterfall([
     require('./question')(pg, options, done);
   },
   (done) => {
-    require('./choice')(pg, options, done);
-  },
-  (done) => {
     require('./voter')(pg, options, done);
   },
   (done) => {

@@ -13,7 +13,9 @@ module.exports = (pg, options, done) => {
       shares TEXT NOT NULL,
       phone_verified BOOLEAN NOT NULL,
       organiser_verified BOOLEAN NOT NULL,
-      FOREIGN KEY (company_id) REFERENCES Companies(id)
+      current_event_id INT,
+      FOREIGN KEY (company_id) REFERENCES Companies(id),
+      FOREIGN KEY (current_event_id) REFERENCES Events(id)
     )`
   );
   createQuery.on('end', () => { client.end(); done(); });

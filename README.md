@@ -88,6 +88,11 @@ __delete voter__
 DELETE /api/organiser/voter/<id of the voter>
 ```
 
+__get questions__ 
+```
+
+```
+
 ### voter endpoints
 
 __registration__

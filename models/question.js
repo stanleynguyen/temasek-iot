@@ -4,7 +4,8 @@ module.exports = (pg, options, done) => {
   const createQuery = client.query(
     `CREATE TABLE IF NOT EXISTS Questions (
       id SERIAL PRIMARY KEY,
-      content TEXT NOT NULL,
+      question TEXT NOT NULL,
+      choices TEXT[] NOT NULL,
       event_id INT NOT NULL,
       FOREIGN KEY (event_id) REFERENCES Events(id)
     )`
