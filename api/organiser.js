@@ -42,7 +42,8 @@ router.post('/password', organiserAuth, (req, res) => {
     `SELECT password FROM Organisers
     WHERE id=${req.user.id}`,
     (err, u) => {
-      if (err || u.length === 0) return res.status(500).send('Database Error');
+      if (err) return res.status(500).send('Database Error');
+      if (u.length === 0) return res.status(403).send('No user found');
       if (!organiserModel.checkPassword(req.body.oldPassword, u[0].password)) return res.status(403).send('Unauthorized');
       dbQuery(
         `UPDATE Organisers

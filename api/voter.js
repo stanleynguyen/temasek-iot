@@ -95,6 +95,66 @@ router.get('/companies', (req, res) => {
   );
 });
 
+router.get('/my-info', voterAuth, (req, res) => {
+  dbQuery(
+    `SELECT Voters.*, Companies.name as company_name
+    FROM Voters LEFT JOIN Companies ON Voters.company_id=Companies.id
+    WHERE Voters.id=${req.user.id}`,
+    (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results[0]);
+    }
+  );
+});
+
 // voting routes
+router.get('/question/all', voterAuth, (req, res) => {
+  dbQuery(
+    `SELECT id, question, array_to_json(choices) as choices
+    FROM Questions
+    WHERE event_id=${req.user.current_event_id}
+    AND ${req.user.id} NOT IN (
+      SELECT voter_id FROM Votes
+      WHERE question_id=Questions.id
+    )`,
+    (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results);
+    }
+  );
+});
+
+router.post('/question/:id', voterAuth, (req, res) => {
+  dbQuery(
+    `INSERT INTO Votes (voter_id, question_id, choice)
+    VALUES (${req.user.id}, (
+      SELECT q.id
+      FROM Questions q
+      WHERE q.event_id=${req.user.current_event_id}
+      AND q.id=${req.params.id}
+    ), ${req.body.choice})`,
+    (err) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).send('OK');
+    }
+  );
+});
+
+router.get('/results', voterAuth, (req, res) => {
+  dbQuery(
+    `SELECT q.id, q.question, array_to_json(q.choices) as choices, json_agg(v) as votes
+    FROM Questions q LEFT JOIN (
+      SELECT v.*, row_to_json(Voters.*) as voter
+      FROM Votes v LEFT JOIN Voters ON v.voter_id=Voters.id
+      GROUP BY v.id, Voters.id
+    ) v ON q.id=v.question_id
+    WHERE q.event_id=1
+    GROUP BY q.id`,
+    (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results);
+    }
+  );
+});
 
 module.exports = router;
