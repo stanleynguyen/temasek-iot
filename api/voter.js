@@ -148,7 +148,7 @@ router.get('/results', voterAuth, (req, res) => {
       FROM Votes v LEFT JOIN Voters ON v.voter_id=Voters.id
       GROUP BY v.id, Voters.id
     ) v ON q.id=v.question_id
-    WHERE q.event_id=1
+    WHERE q.event_id=${req.user.current_event_id}
     GROUP BY q.id`,
     (err, results) => {
       if (err) return res.status(500).send('Database Error');

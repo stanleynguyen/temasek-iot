@@ -274,4 +274,22 @@ router.delete('/question/:id', organiserAuth, (req, res) => {
   );
 });
 
+// results
+router.get('/results', organiserAuth, (req, res) => {
+  dbQuery(
+    `SELECT q.id, q.question, array_to_json(q.choices) as choices, json_agg(v) as votes
+    FROM Questions q LEFT JOIN (
+      SELECT v.*, row_to_json(Voters.*) as voter
+      FROM Votes v LEFT JOIN Voters ON v.voter_id=Voters.id
+      GROUP BY v.id, Voters.id
+    ) v ON q.id=v.question_id
+    WHERE q.event_id=${req.query.eventId}
+    GROUP BY q.id`,
+    (err, results) => {
+      if (err) return res.status(500).send('Database Error');
+      res.status(200).json(results);
+    }
+  );
+});
+
 module.exports = router;
