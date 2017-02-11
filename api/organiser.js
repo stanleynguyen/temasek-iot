@@ -141,9 +141,9 @@ router.get('/event/all', organiserAuth, (req, res) => {
   dbQuery(
     `SELECT e.id, e.name, e.started, e.ended,
     CASE WHEN COUNT(q)=0 THEN '[]'
-    ELSE json_agg(q) END AS questions,
+    ELSE json_agg(DISTINCT q) END AS questions,
     CASE WHEN COUNT(v)=0 THEN '[]'
-    ELSE json_agg(v) END AS voters
+    ELSE json_agg(DISTINCT v) END AS voters
     FROM Events e
     LEFT JOIN Questions q ON e.id=q.event_id
     LEFT JOIN (
