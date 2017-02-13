@@ -287,6 +287,19 @@ router.get('/results', organiserAuth, (req, res) => {
     GROUP BY q.id`,
     (err, results) => {
       if (err) return res.status(500).send('Database Error');
+      results.forEach((c) => {
+        let votes = c.votes.reduce((sum, v) => {
+          if (!sum[v.choice]) sum[v.choice] = 1;
+          else sum[v.choice]++;
+          return sum;
+        }, {});
+
+        let data = c.choices.map((choice) => [choice, 0] );
+        Object.keys(votes).forEach((k) => {
+          data[parseInt(k)][1] = votes[k];
+        });
+        c.votes = data;
+      });
       res.status(200).json(results);
     }
   );
