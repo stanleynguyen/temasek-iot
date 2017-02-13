@@ -142,7 +142,9 @@ router.post('/question/:id', voterAuth, (req, res) => {
 
 router.get('/results', voterAuth, (req, res) => {
   dbQuery(
-    `SELECT q.id, q.question, array_to_json(q.choices) as choices, json_agg(v) as votes
+    `SELECT q.id, q.question, array_to_json(q.choices) as choices,
+    CASE WHEN COUNT(v)=0 THEN '[]'
+    ELSE json_agg(v) END AS votes
     FROM Questions q LEFT JOIN (
       SELECT v.*, row_to_json(Voters.*) as voter
       FROM Votes v LEFT JOIN Voters ON v.voter_id=Voters.id
